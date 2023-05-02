@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  elasticsearch:
+    image: elasticsearch:8.6.0
+    restart: always
+    environment:
+      xpack.security.enabled: "false"
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    ports:
+      - 127.0.0.1:30403:9200
+      - 127.0.0.1:30405:9300
+    volumes:
+      - ${HOST_ELASTIC_DATA_DIR}:/usr/share/elasticsearch/data
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.6.0
+    volumes:
+      - ${HOST_KIBANA_DATA_DIR}:/usr/share/kibana/data
+    restart: always
+    environment:
+      SERVER_NAME: ${KIBANA_SERVER_NAME}
+      SERVER_PUBLICBASEURL: ${KIBANA_PUBLIC_URL}
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      SERVER_BASEPATH: '/kibana'
+#      SERVER_HOST=0.0.0.0
+      SERVER_REWRITEBASEPATH: "true"
+    ports:
+      - 127.0.0.1:30406:5601
+  gup-imports:
+    image: gup-imports
+    restart: always
+    environment:
+      - SCOPUS_API_KEY=${SCRIPT_SCOPUS_API_KEY}
+    tty: true
+    volumes:
+      - ${HOST_SCOPUS_RAW_JSON_FILES_DIR}:/data/files/scopus-raw
+      - ${HOST_SCOPUS_NORMALISED_JSON_FILES_DIR}:/data/files/scopus-normalised
+      - ${HOST_SCRIPT_FILES_DIR}:/data/scripts
