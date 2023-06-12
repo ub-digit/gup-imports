@@ -97,26 +97,30 @@ if not os.path.isdir(args.source_path):
 for file_name in os.listdir(args.source_path):
   with open(os.path.join(args.source_path, file_name)) as input_file:
       input_data = json.load(input_file)
+      scopus_id = get_scopus_id(input_data)
 
       publication_type_id = get_publication_type_id(input_data)
       if publication_type_id is None:
         break
-      output_data = {"publication": {}}
-      output_data["publication"]["publication_type_id"] = publication_type_id
-      output_data["publication"]["title"] = get_key("dc:title", input_data)
-      output_data["publication"]["pubyear"] = get_year(get_key("prism:coverDate", input_data))
-      output_data["publication"]["sourcetitle"] = get_key("prism:publicationName", input_data)
-      output_data["publication"]["issn"] = get_key("prism:issn", input_data)
-      output_data["publication"]["eissn"] = get_key("prism:eissn", input_data)
-      output_data["publication"]["sourcevolume"] = get_key("prism:volume", input_data)
-      output_data["publication"]["sourceissue"] = get_key("prism:issueIdentifier", input_data)
-      output_data["publication"]["sourcepages"] = get_key("prism:pageRange", input_data)
-      output_data["publication"]["articlenumber"] = get_key("article-number", input_data)
-      output_data["publication"]["abstract"] = get_key("dc:description", input_data)
-      output_data["publication"]["keywords"] = format_keywords(get_key("authkeywords", input_data))
-      output_data["publication"]["publication_identifiers"] = create_identifiers(input_data)
+      output_data = {"data": {}}
+      output_data["data"]["id"] = "scopus_" + scopus_id
+      output_data["data"]["publication_type_id"] = publication_type_id
+      output_data["data"]["title"] = get_key("dc:title", input_data)
+      output_data["data"]["pubyear"] = get_year(get_key("prism:coverDate", input_data))
+      output_data["data"]["sourcetitle"] = get_key("prism:publicationName", input_data)
+      output_data["data"]["issn"] = get_key("prism:issn", input_data)
+      output_data["data"]["eissn"] = get_key("prism:eissn", input_data)
+      output_data["data"]["sourcevolume"] = get_key("prism:volume", input_data)
+      output_data["data"]["sourceissue"] = get_key("prism:issueIdentifier", input_data)
+      output_data["data"]["sourcepages"] = get_key("prism:pageRange", input_data)
+      output_data["data"]["articlenumber"] = get_key("article-number", input_data)
+      output_data["data"]["abstract"] = get_key("dc:description", input_data)
+      output_data["data"]["keywords"] = format_keywords(get_key("authkeywords", input_data))
+      output_data["data"]["publication_identifiers"] = create_identifiers(input_data)
+
+      output_data["data"]["source"] = "scopus"
+      output_data["data"]["attended"] = False
       
-      scopus_id = get_scopus_id(input_data)
 
       if not os.path.exists(f"{args.dest_base_path}"):
         os.makedirs(f"{args.dest_base_path}")
