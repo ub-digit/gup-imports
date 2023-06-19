@@ -10,46 +10,46 @@ def get_key(key, data):
     return None
 
 def get_publication_type_id(input_data):
-  source_type	= get_key("prism:aggregationType", input_data)
-  document_type = get_key("subtypeDescription", input_data)
+  source_type	= get_key("prism:aggregationType", input_data).lower()
+  document_type = get_key("subtypeDescription", input_data).lower()
   
-  if source_type == "Journal" and document_type == "Article":
+  if source_type == "journal" and document_type == "article":
     return 5 # Artikel i vetenskaplig tidskrift
-  elif source_type == "Journal" and document_type == "Conference Paper":
+  elif source_type == "journal" and document_type == "conference paper":
     return 5 # Artikel i vetenskaplig tidskrift
-  elif source_type == "Journal" and document_type == "Review":
+  elif source_type == "journal" and document_type == "review":
     return 22 # Forskningsöversiktsartikel (Review article)
-  elif source_type == "Journal" and document_type == "Editorial":
+  elif source_type == "journal" and document_type == "editorial":
     return 40 # Inledande text i tidskrift
-  elif source_type == "Journal" and document_type == "Letter":
+  elif source_type == "journal" and document_type == "letter":
     return 40 # Inledande text i tidskrift
-  elif source_type == "Journal" and document_type == "Note":
+  elif source_type == "journal" and document_type == "note":
     return 40 # Inledande text i tidskrift
-  elif source_type == "Journal" and document_type == "Short survey":
+  elif source_type == "journal" and document_type == "short survey":
     return 40 # Inledande text i tidskrift
-  elif source_type == "Book" and document_type == "Book chapter":
+  elif source_type == "book" and document_type == "book chapter":
     return 10 # Kapitel i bok
-  elif source_type == "Conference Proceeding" and document_type == "Conference Paper":
+  elif source_type == "conference proceeding" and document_type == "conference paper":
     return 2 # Paper i proceeding
-  elif source_type == "Book series" and document_type == "Book chapter":
+  elif source_type == "book series" and document_type == "book chapter":
     return 10 # Kapitel i bok
-  elif source_type == "Book" and document_type == "Book":
+  elif source_type == "book" and document_type == "book":
     return 9 # Bok
-  elif source_type == "Book series" and document_type == "Book":
+  elif source_type == "book series" and document_type == "book":
     return 9 # Bok
-  elif source_type == "Book" and document_type == "Editorial":
+  elif source_type == "book" and document_type == "editorial":
     return 10 # Kapitel i bok
-  elif source_type == "Conference Proceeding" and document_type == "Editorial":
+  elif source_type == "conference proceeding" and document_type == "editorial":
     return 1 # Konferensbidrag (offentliggjort, men ej förlagsutgivet)
-  elif source_type == "Conference Proceeding" and document_type == "Book chapter":
+  elif source_type == "conference proceeding" and document_type == "book chapter":
     return 2 # Paper i proceeding
-  elif source_type == "Book series" and document_type == "Conference Paper":
+  elif source_type == "book series" and document_type == "conference paper":
     return 10 # Kapitel i bok
-  elif source_type == "Book series" and document_type == "Article":
+  elif source_type == "book series" and document_type == "article":
     return 10 # Kapitel i bok
-  elif source_type == "Book series" and document_type == "Review":
+  elif source_type == "book series" and document_type == "review":
     return 10 # Kapitel i bok
-  elif source_type == "Book series" and document_type == "Note":
+  elif source_type == "book series" and document_type == "note":
     return 10 # Kapitel i bok
   else:
     return None
@@ -101,7 +101,8 @@ for file_name in os.listdir(args.source_path):
 
       publication_type_id = get_publication_type_id(input_data)
       if publication_type_id is None:
-        break
+        print("No publication type mapping for scopus id: " + scopus_id)
+        continue
       output_data = {"data": {}}
       output_data["data"]["id"] = "scopus_" + scopus_id
       output_data["data"]["publication_type_id"] = publication_type_id
