@@ -10,9 +10,17 @@ def get_key(key, data):
     return None
 
 def get_publication_type_id(input_data):
-  source_type	= get_key("prism:aggregationType", input_data).lower()
-  document_type = get_key("subtypeDescription", input_data).lower()
+  source_type	= get_key("prism:aggregationType", input_data)
+  document_type = get_key("subtypeDescription", input_data)
   
+  if source_type is None:
+    return None
+  if document_type is None:
+    return None
+
+  source_type	= source_type.lower()
+  document_type = document_type.lower()
+
   if source_type == "journal" and document_type == "article":
     return 5 # Artikel i vetenskaplig tidskrift
   elif source_type == "journal" and document_type == "conference paper":
