@@ -31,6 +31,7 @@ services:
     restart: always
     environment:
       - SCOPUS_API_KEY=${SCRIPT_SCOPUS_API_KEY}
+      - GUP_ADMIN_API_KEY=${SCRIPT_GUP_ADMIN_API_KEY}
     tty: true
     volumes:
       - ${HOST_SCOPUS_RAW_JSON_FILES_DIR}:/data/files/scopus-raw
