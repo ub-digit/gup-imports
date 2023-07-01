@@ -9,7 +9,7 @@ def get_key(key, data):
   else:
     return None
 
-def get_publication_type_id(input_data):
+def get_publication_type(input_data):
   source_type	= get_key("prism:aggregationType", input_data)
   document_type = get_key("subtypeDescription", input_data)
   
@@ -22,43 +22,43 @@ def get_publication_type_id(input_data):
   document_type = document_type.lower()
 
   if source_type == "journal" and document_type == "article":
-    return 5 # Artikel i vetenskaplig tidskrift
+    return {"id": 5, "label": "Artikel i vetenskaplig tidskrift"}
   elif source_type == "journal" and document_type == "conference paper":
-    return 5 # Artikel i vetenskaplig tidskrift
+    return {"id": 5, "label": "Artikel i vetenskaplig tidskrift"}
   elif source_type == "journal" and document_type == "review":
-    return 22 # Forskningsöversiktsartikel (Review article)
+    return {"id": 22, "label": "Forskningsöversiktsartikel (Review article)"}
   elif source_type == "journal" and document_type == "editorial":
-    return 40 # Inledande text i tidskrift
+    return {"id": 40, "label": "Inledande text i tidskrift"}
   elif source_type == "journal" and document_type == "letter":
-    return 40 # Inledande text i tidskrift
+    return {"id": 40, "label": "Inledande text i tidskrift"}
   elif source_type == "journal" and document_type == "note":
-    return 40 # Inledande text i tidskrift
+    return {"id": 40, "label": "Inledande text i tidskrift"}
   elif source_type == "journal" and document_type == "short survey":
-    return 40 # Inledande text i tidskrift
+    return {"id": 40, "label": "Inledande text i tidskrift"}
   elif source_type == "book" and document_type == "book chapter":
-    return 10 # Kapitel i bok
+    return {"id": 10, "label": "Kapitel i bok"}
   elif source_type == "conference proceeding" and document_type == "conference paper":
-    return 2 # Paper i proceeding
+    return {"id": 2, "label": "Paper i proceeding"}
   elif source_type == "book series" and document_type == "book chapter":
-    return 10 # Kapitel i bok
+    return {"id": 10, "label": "Kapitel i bok"}
   elif source_type == "book" and document_type == "book":
-    return 9 # Bok
+    return {"id": 9, "label": "Bok"}
   elif source_type == "book series" and document_type == "book":
-    return 9 # Bok
+    return {"id": 9, "label": "Bok"}
   elif source_type == "book" and document_type == "editorial":
-    return 10 # Kapitel i bok
+    return {"id": 10, "label": "Kapitel i bok"}
   elif source_type == "conference proceeding" and document_type == "editorial":
-    return 1 # Konferensbidrag (offentliggjort, men ej förlagsutgivet)
+    return {"id": 1, "label": "Konferensbidrag (offentliggjort, men ej förlagsutgivet)"}
   elif source_type == "conference proceeding" and document_type == "book chapter":
-    return 2 # Paper i proceeding
+    return {"id": 2, "label": "Paper i proceeding"}
   elif source_type == "book series" and document_type == "conference paper":
-    return 10 # Kapitel i bok
+    return {"id": 10, "label": "Kapitel i bok"}
   elif source_type == "book series" and document_type == "article":
-    return 10 # Kapitel i bok
+    return {"id": 10, "label": "Kapitel i bok"}
   elif source_type == "book series" and document_type == "review":
-    return 10 # Kapitel i bok
+    return {"id": 10, "label": "Kapitel i bok"}
   elif source_type == "book series" and document_type == "note":
-    return 10 # Kapitel i bok
+    return {"id": 10, "label": "Kapitel i bok"}
   else:
     return None
 
@@ -107,13 +107,14 @@ for file_name in os.listdir(args.source_path):
       input_data = json.load(input_file)
       scopus_id = get_scopus_id(input_data)
 
-      publication_type_id = get_publication_type_id(input_data)
-      if publication_type_id is None:
+      publication_type = get_publication_type(input_data)
+      if publication_type is None:
         print("No publication type mapping for scopus id: " + scopus_id)
         continue
       output_data = {"data": {}}
       output_data["data"]["id"] = "scopus_" + scopus_id
-      output_data["data"]["publication_type_id"] = publication_type_id
+      output_data["data"]["publication_type_id"] = publication_type["id"]
+      output_data["data"]["publication_type_label"] = publication_type["label"]
       output_data["data"]["title"] = get_key("dc:title", input_data)
       output_data["data"]["pubyear"] = get_year(get_key("prism:coverDate", input_data))
       output_data["data"]["sourcetitle"] = get_key("prism:publicationName", input_data)
