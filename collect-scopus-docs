@@ -4,4 +4,5 @@ d=$(date -I -d "3 day ago")
 docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/get-scoups-docs.py -d '"$d"' -o /data/files/scopus-raw -a $SCOPUS_API_KEY' >> /var/tmp/gup-scopus.log 
 docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/index-scopus-docs.py -d /data/files/scopus-raw/'"$d"'' >> /var/tmp/gup-scopus-indexing.log
 docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/transform-scopus-docs.py -s /data/files/scopus-raw/'"$d"' -d /data/files/scopus-normalised/'"$d"'' >> /var/tmp/gup-scopus-normalising.log
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-scopus-docs.py -d /data/files/scopus-normalised/'"$d"' -u $GUP_ADMIN_BASE_URL -a $GUP_ADMIN_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin.log
 
