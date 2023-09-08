@@ -27,10 +27,11 @@ services:
     ports:
       - 127.0.0.1:30406:5601
   gup-imports:
-    image: gup-imports
+    image: docker.ub.gu.se/gup-imports:${GUP_IMPORTS_IMAGE_VERSION}
     restart: always
     environment:
       - SCOPUS_API_KEY=${SCRIPT_SCOPUS_API_KEY}
+      - GUP_ADMIN_BASE_URL=${SCRIPT_GUP_ADMIN_BASE_URL}
       - GUP_ADMIN_API_KEY=${SCRIPT_GUP_ADMIN_API_KEY}
     tty: true
     volumes:
