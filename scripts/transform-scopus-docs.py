@@ -153,8 +153,8 @@ def create_authors(input_data):
       person_affiliations = get_person_affiliations(affid, publication_affiliations)
     person = {}
     person["position"] = get_data("@seq", author)
-    person["last_name"] = get_data("given-name", author)
-    person["first_name"] = get_data("surname", author)
+    person["last_name"] = get_data("surname", author)
+    person["first_name"] = get_data("given-name", author)
     person["identifiers"] = create_person_identifiers(author)
 
     authors.append({"affiliations": person_affiliations, "person": [person]})
