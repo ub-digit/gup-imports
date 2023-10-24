@@ -201,7 +201,6 @@ for file_name in os.listdir(args.source_path):
       output_data["data"]["updated_at"] = get_data("orig-load-date", input_data)
 
       output_data["data"]["source"] = "scopus"
-      output_data["data"]["attended"] = False
       
 
       if not os.path.exists(f"{args.dest_base_path}"):
