@@ -1,8 +1,16 @@
 #!/bin/bash
 
 d=$(date -I -d "3 day ago")
-#docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/get-wos-docs.py -d '"$d"' -o /data/files/wos-raw -a $WOS_API_KEY' >> /var/tmp/gup-wos.log 
-#docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/index-wos-docs.py -d /data/files/wos-raw/'"$d"'' >> /var/tmp/gup-wos-indexing.log
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/get-wos-docs.py -d '"$d"' -o /data/files/wos-raw -a $WOS_API_KEY' >> /var/tmp/gup-wos.log
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/index-wos-docs.py -d /data/files/wos-raw/'"$d"'' >> /var/tmp/gup-wos-indexing.log
 docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/transform-wos-docs.py -s /data/files/wos-raw/'"$d"' -d /data/files/wos-normalised/'"$d"'' >> /var/tmp/gup-wos-normalising.log
-#docker exec gup-imports_gup-imports-1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/wos-normalised/'"$d"' -u $GUP_ADMIN_BASE_URL -a $GUP_ADMIN_API_KEY' >> /var/tmp/gup-wos-put-to-gup-admin.log
+
+# LAB
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/wos-normalised/'"$d"' -u $INDEX_MANAGER_LAB_URL -a $INDEX_MANAGER_LAB_API_KEY' >> /var/tmp/gup-wos-put-to-gup-admin-index-manager-lab.log
+
+# STAGING
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/wos-normalised/'"$d"' -u $INDEX_MANAGER_STAGING_URL -a $INDEX_MANAGER_STAGING_API_KEY' >> /var/tmp/gup-wos-put-to-gup-admin-index-manager-staging.log
+
+# PRODUCTION - Omit Production environment since it is not yet in use.
+#docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/wos-normalised/'"$d"' -u $INDEX_MANAGER_URL -a $INDEX_MANAGER_API_KEY' >> /var/tmp/gup-wos-put-to-gup-admin-index-manager-production.log
 
