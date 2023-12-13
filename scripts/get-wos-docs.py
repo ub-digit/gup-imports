@@ -64,7 +64,6 @@ while (first or start < total):
     if not os.path.exists(f"{args.output}/{args.date}"):
       os.makedirs(f"{args.output}/{args.date}")
       print(f"{args.output}/{args.date}" + " directory doesn't exist, create it")
-      os.mkdir(f"{args.output}/{args.date}")
 
   #start = int(raw_json["search-results"]["opensearch:startIndex"])
   #items = int(raw_json["search-results"]["opensearch:itemsPerPage"])
