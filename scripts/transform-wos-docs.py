@@ -117,7 +117,7 @@ def create_publication_identifiers(wos_id, input_data):
     if id['type'] == "doi":
       identifiers.append(create_publication_identifier_entry('doi', id['value']))
     elif id['type'] == "pmid":
-      identifiers.append(create_publication_identifier_entry('pubmed', id['value']))
+      identifiers.append(create_publication_identifier_entry('pubmed', id['value'].split(':')[-1]))
     elif id['type'] == "issn":
       output_data["data"]['issn'] = id['value']
     elif id['type'] == "eissn":
@@ -142,7 +142,7 @@ def create_authors(input_data):
     person['position'] = individual['seq_no']
     person['first_name'] = individual['first_name']
     person['last_name'] = individual['last_name']
-    authors.append({"person": person, "affiliation": affiliation })
+    authors.append({"affiliation": [affiliation], "person": [person]})
 
   return authors
 
