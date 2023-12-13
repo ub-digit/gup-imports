@@ -68,8 +68,24 @@ def get_year(date):
   # Assumeing yyyy-mm-dd format
   return date[:4]
 
+def format_issn(issn):
+  if issn is None:
+    return None
+  if len(issn) == 9 and issn[5] == "-":
+    return issn
+  issn = issn.replace("(ISSN)", "")
+  issn = issn.strip()
+  if len(issn) == 8:
+    return issn[:4] + "-" + issn[4:]
+  return issn
+
 def get_scopus_id(input_data):
   return get_data("dc:identifier", input_data).replace("SCOPUS_ID:", "")
+
+def get_isbn(input_data):
+  if input_data is None:
+    return None
+  return input_data[0]['$']
 
 def format_keywords(keywords):
   if keywords is None:
@@ -137,8 +153,8 @@ def create_authors(input_data):
       person_affiliations = get_person_affiliations(affid, publication_affiliations)
     person = {}
     person["position"] = get_data("@seq", author)
-    person["last_name"] = get_data("given-name", author)
-    person["first_name"] = get_data("surname", author)
+    person["last_name"] = get_data("surname", author)
+    person["first_name"] = get_data("given-name", author)
     person["identifiers"] = create_person_identifiers(author)
 
     authors.append({"affiliations": person_affiliations, "person": [person]})
@@ -170,19 +186,21 @@ for file_name in os.listdir(args.source_path):
       output_data["data"]["title"] = get_data("dc:title", input_data)
       output_data["data"]["pubyear"] = get_year(get_data("prism:coverDate", input_data))
       output_data["data"]["sourcetitle"] = get_data("prism:publicationName", input_data)
-      output_data["data"]["issn"] = get_data("prism:issn", input_data)
-      output_data["data"]["eissn"] = get_data("prism:eissn", input_data)
+      output_data["data"]["issn"] = format_issn(get_data("prism:issn", input_data))
+      output_data["data"]["eissn"] = format_issn(get_data("prism:eIssn", input_data))
+      output_data["data"]["isbn"] = get_isbn(get_data("prism:isbn", input_data))
       output_data["data"]["sourcevolume"] = get_data("prism:volume", input_data)
       output_data["data"]["sourceissue"] = get_data("prism:issueIdentifier", input_data)
       output_data["data"]["sourcepages"] = get_data("prism:pageRange", input_data)
-      output_data["data"]["articlenumber"] = get_data("article-number", input_data)
+      output_data["data"]["article_number"] = get_data("article-number", input_data)
       output_data["data"]["abstract"] = get_data("dc:description", input_data)
       output_data["data"]["keywords"] = format_keywords(get_data("authkeywords", input_data))
       output_data["data"]["publication_identifiers"] = create_publication_identifiers(input_data)
       output_data["data"]["authors"] = create_authors(input_data)
+      output_data["data"]["created_at"] = get_data("orig-load-date", input_data)
+      output_data["data"]["updated_at"] = get_data("orig-load-date", input_data)
 
       output_data["data"]["source"] = "scopus"
-      output_data["data"]["attended"] = False
       
 
       if not os.path.exists(f"{args.dest_base_path}"):

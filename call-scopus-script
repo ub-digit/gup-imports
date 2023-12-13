@@ -1,0 +1,10 @@
+#!/bin/bash
+
+d1=$1
+d2=$(date -I -d "$d1 + 1 week")
+
+while [ "$d1" != $d2 ]; do
+  docker-compose exec gup-imports bash -c 'python3 /data/scripts/get_scoups_docs.py -d '"$d1"' -o /data/files -a $SCOPUS_API_KEY' >> /var/tmp/gup-scopus.log 
+  d1=$(date -I -d "$d1 + 1 day")
+done
+
