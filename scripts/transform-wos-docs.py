@@ -142,6 +142,7 @@ def create_authors(input_data):
     person['position'] = individual['seq_no']
     person['first_name'] = individual['first_name']
     person['last_name'] = individual['last_name']
+    person['identifiers'] = []
     authors.append({"affiliation": [affiliation], "person": [person]})
 
   return authors
