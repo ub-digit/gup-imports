@@ -61,6 +61,8 @@ def get_publication_type(input_data):
     return {"id": 1, "ref_value": "NOTREF", "label": "Konferensbidrag (offentliggjort, men ej förlagsutgivet)"}
   elif source_type == "book series" and document_type == "meeting abstract": 
     return {"id": 1, "ref_value": "NOTREF", "label": "Konferensbidrag (offentliggjort, men ej förlagsutgivet)"}
+  elif source_type == "journal" and document_type == "meeting abstract":
+    return {"id": 1, "ref_value": "NOTREF", "label": "Konferensbidrag (offentliggjort, men ej förlagsutgivet)"}
   elif source_type == "book" and document_type == "editorial material": 
     return {"id": 10, "ref_value": "NOTREF", "label": "Kapitel i bok"}
   elif source_type == "book series" and document_type == "editorial material": 
@@ -127,7 +129,7 @@ def create_publication_identifiers(wos_id, input_data):
     elif id['type'] == "isbn":
       output_data["data"]['isbn'] = id['value']
     elif id['type'] == "art_no":
-      output_data["data"]['art_no'] = id['value'].replace("ARTN ", "")
+      output_data["data"]['article_number'] = id['value'].replace("ARTN ", "")
 
   return identifiers
 
