@@ -39,6 +39,8 @@ def get_publication_type(input_data):
     return {"id": 5, "ref_value": "ISREF", "label": "Artikel i vetenskaplig tidskrift"}
   elif source_type == "journal" and document_type == "review (article)": 
     return {"id": 22, "ref_value": "ISREF", "label": "Forskningsöversiktsartikel (Review article)"}
+  elif source_type == "journal" and document_type == "review":
+    return {"id": 22, "ref_value": "ISREF", "label": "Forskningsöversiktsartikel (Review article)"}
   elif source_type == "journal" and document_type == "proceeding paper": 
     return {"id": 5, "ref_value": "ISREF", "label": "Artikel i vetenskaplig tidskrift"}
   elif source_type == "journal" and document_type == "editorial material": 
