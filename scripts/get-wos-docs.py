@@ -21,27 +21,19 @@ parser.add_argument("-c", "--count", dest = "count", default = 10)
 parser.add_argument("-o", "--output", dest = "output", default = ".")
 args = parser.parse_args()
 
-#if args.view == "COMPLETE":
-#  fields = 'orig-load-date,load-date,description,link,title,author,creator,publicationName,url,issn,isbn,volume,issueIdentifier,pageRange,coverDate,coverDisplayDate,doi,affiliation,eid,identifier,citedby-count,,aggregationType,subtype,subtypeDescription,author-count,authkeywords,article-number,source-id,pubmed-id,fund-acr,fund-no,fund-sponsor,openaccess,openaccessFlag,freetoread,freetoreadLabel'
-
 print ("Date: " + args.date)
-date_object = datetime.strptime(args.date, '%Y-%m-%d').date()
 
-#timespan_query = "AND ORIG-LOAD-DATE AFT " + (date_object + timedelta(days=-1)).strftime('%Y%m%d') + " AND ORIG-LOAD-DATE BEF " + (date_object + timedelta(days=1)).strftime('%Y%m%d') # Only allow one day interval so far...
-
-query = base_query # + " " + timespan_query
+query = base_query
 print("Query: " + query)
-print("ApiKey: " + args.apikey)
-print("BaseURL: " + base_url)
 
-#params = {'apiKey': args.apikey, 'httpAccept': 'application/json', 'view': args.view, 'field': fields, 'count': args.count, 'query': query}
-params = {'usrQuery': query, 'databaseId': 'WOS', 'count': 5, 'firstRecord': 1}
+publishTimeSpan = args.date + "+" + args.date
+params = {'usrQuery': query, 'databaseId': 'WOS', 'publishTimeSpan': publishTimeSpan, 'count': args.count}
 
-start = 0
-
+start = 1
 first = True
-while (first or start < total):
-  #params['start'] = start
+
+while (first or start <= total):
+  params['firstRecord'] = start
 
   response = requests.get(base_url, params, headers={"X-ApiKey":args.apikey})
   content = response.content
@@ -49,12 +41,8 @@ while (first or start < total):
   #print(raw_json)
   #sys.exit()
 
-  #total = int(raw_json["search-results"]["opensearch:totalResults"])
-  #total = int(raw_json["metadata"]["total"])
-  #total = int(raw_json['Data']['Records']['records']['QueryResult']['RecordsFound'])
-  #total = 5
-  total = int(len(raw_json['Data']['Records']['records']['REC']))
-
+  total = int(raw_json['QueryResult']['RecordsFound'])
+  print("total: " + str(total))
   if total is None or total == 0:
     print("No documents found")
     sys.exit()
@@ -65,13 +53,7 @@ while (first or start < total):
       os.makedirs(f"{args.output}/{args.date}")
       print(f"{args.output}/{args.date}" + " directory doesn't exist, create it")
 
-  #start = int(raw_json["search-results"]["opensearch:startIndex"])
-  #items = int(raw_json["search-results"]["opensearch:itemsPerPage"])
-  #print("Saving documents from start index : " + str(start))
-
-  #docs = raw_json["hits"]
   docs = raw_json['Data']['Records']['records']['REC']
-  print(str(docs))
   for doc in docs:
     #wos_id = doc["dc:identifier"].split("SCOPUS_ID:",1)[1]
     wos_id = doc["UID"][5:999]
