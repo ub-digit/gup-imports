@@ -142,6 +142,21 @@ def create_publication_identifiers(wos_id, input_data):
 
   return identifiers
 
+def create_person_identifier_entry(type, value):
+  return {"type": type,  "value": value}
+
+def create_person_identifiers(input_data):
+  identifiers = []
+  # researcher-id
+  researcher_id_value = get_data("r_id", input_data)
+  if researcher_id_value is not None:
+    identifiers.append(create_person_identifier_entry("wos-researcher-id", researcher_id_value))
+  # daising-id
+  daising_id_value = get_data("daisng_id", input_data)
+  if daising_id_value is not None:
+    identifiers.append(create_person_identifier_entry("wos-daising-id", str(daising_id_value)))
+  return identifiers
+
 def create_authors(input_data):
   authors = []
   count = get_data('count', get_data('names', input_data))
@@ -158,7 +173,7 @@ def create_authors(input_data):
     person['position'] = individual['seq_no']
     person['first_name'] = individual['first_name']
     person['last_name'] = individual['last_name']
-    person['identifiers'] = []
+    person["identifiers"] = create_person_identifiers(individual)
     authors.append({"affiliation": [affiliation], "person": [person]})
 
   return authors
