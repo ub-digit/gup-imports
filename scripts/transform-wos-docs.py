@@ -172,50 +172,50 @@ if not os.path.isdir(args.source_path):
 
 for file_name in os.listdir(args.source_path):
   with open(os.path.join(args.source_path, file_name)) as input_file:
-      input_data = json.load(input_file)
-      wos_id = get_wos_id(input_data)
-      publication_type = get_publication_type(input_data)
-      if publication_type is None:
-        print("No publication type mapping for wos id: " + wos_id)
-        continue
-      output_data = {"data": {}}
-      output_data["data"]["id"] = "WOS_" + wos_id
-      output_data["data"]["publication_type_id"] = str(publication_type["id"])
-      output_data["data"]["publication_type_label"] = publication_type["label"]
-      output_data["data"]["ref_value"] = publication_type["ref_value"]
-      output_data["data"]["title"] = get_title(get_data('title', get_data('titles', get_data('summary', get_data('static_data', input_data)))))
-      output_data["data"]["pubyear"] = str(get_data('pubyear', get_data('pub_info', get_data('summary', get_data('static_data', input_data)))))
-      
-      get_published_in(input_data)
+    input_data = json.load(input_file)
+    wos_id = get_wos_id(input_data)
+    publication_type = get_publication_type(input_data)
+    if publication_type is None:
+      print("No publication type mapping for wos id: " + wos_id)
+      continue
+    output_data = {"data": {}}
+    output_data["data"]["id"] = "WOS_" + wos_id
+    output_data["data"]["publication_type_id"] = str(publication_type["id"])
+    output_data["data"]["publication_type_label"] = publication_type["label"]
+    output_data["data"]["ref_value"] = publication_type["ref_value"]
+    output_data["data"]["title"] = get_title(get_data('title', get_data('titles', get_data('summary', get_data('static_data', input_data)))))
+    output_data["data"]["pubyear"] = str(get_data('pubyear', get_data('pub_info', get_data('summary', get_data('static_data', input_data)))))
 
-      first_publisher = ""
-      publishers = get_data('names', get_data('publisher', get_data('publishers', get_data('summary', get_data('static_data', input_data)))))
-      count = get_data('count', publishers)
-      if count == 1:
-        first_publisher = get_data('display_name', get_data('name', publishers))
-      output_data["data"]["publisher"] = first_publisher
+    get_published_in(input_data)
 
-      output_data["data"]["keywords"] = format_keywords(get_data('keyword', get_data('keywords', get_data('fullrecord_metadata', get_data('static_data', input_data)))))
-      output_data["data"]["language"] = get_data('content', get_data('language', get_data('languages', get_data('fullrecord_metadata', get_data('static_data', input_data)))))
-      
-      output_data["data"]["publication_identifiers"] = create_publication_identifiers(wos_id, get_data('identifier', get_data('identifiers', get_data('cluster_related', get_data('dynamic_data', input_data)))))
+    first_publisher = ""
+    publishers = get_data('names', get_data('publisher', get_data('publishers', get_data('summary', get_data('static_data', input_data)))))
+    count = get_data('count', publishers)
+    if count == 1:
+      first_publisher = get_data('display_name', get_data('name', publishers))
+    output_data["data"]["publisher"] = first_publisher
 
-      if (get_data('has_abstract', get_data('pub_info', get_data('summary', get_data('static_data', input_data))))) == "Y":
-        output_data["data"]["abstract"] = get_abstract(get_data('abstract_text', get_data('abstract', get_data('abstracts', get_data('fullrecord_metadata', get_data('static_data', input_data))))))
+    output_data["data"]["keywords"] = format_keywords(get_data('keyword', get_data('keywords', get_data('fullrecord_metadata', get_data('static_data', input_data)))))
+    output_data["data"]["language"] = get_data('content', get_data('language', get_data('languages', get_data('fullrecord_metadata', get_data('static_data', input_data)))))
 
-      output_data["data"]["authors"] = create_authors(get_data('summary', get_data('static_data', input_data)))      
+    output_data["data"]["publication_identifiers"] = create_publication_identifiers(wos_id, get_data('identifier', get_data('identifiers', get_data('cluster_related', get_data('dynamic_data', input_data)))))
 
-      output_data["data"]["source"] = "wos"
+    if (get_data('has_abstract', get_data('pub_info', get_data('summary', get_data('static_data', input_data))))) == "Y":
+      output_data["data"]["abstract"] = get_abstract(get_data('abstract_text', get_data('abstract', get_data('abstracts', get_data('fullrecord_metadata', get_data('static_data', input_data))))))
 
-      load_date = get_data('date_loaded', get_data('dates', input_data))
-      load_date = datetime.strptime(load_date, '%Y-%m-%dT%H:%M:%S.%f')
-      output_data["data"]["created_at"] = load_date.strftime('%Y-%m-%dT%H:%M:%S')
-      output_data["data"]["updated_at"] = load_date.strftime('%Y-%m-%dT%H:%M:%S')
+    output_data["data"]["authors"] = create_authors(get_data('summary', get_data('static_data', input_data)))
+
+    output_data["data"]["source"] = "wos"
+
+    load_date = get_data('date_loaded', get_data('dates', input_data))
+    load_date = datetime.strptime(load_date, '%Y-%m-%dT%H:%M:%S.%f')
+    output_data["data"]["created_at"] = load_date.strftime('%Y-%m-%dT%H:%M:%S')
+    output_data["data"]["updated_at"] = load_date.strftime('%Y-%m-%dT%H:%M:%S')
 
 
-      if not os.path.exists(f"{args.dest_base_path}"):
-        os.makedirs(f"{args.dest_base_path}")
-        print(f"{args.dest_base_path}" + " directory doesn't exist, create it")
+    if not os.path.exists(f"{args.dest_base_path}"):
+      os.makedirs(f"{args.dest_base_path}")
+      print(f"{args.dest_base_path}" + " directory doesn't exist, create it")
 
-      with open(f"{args.dest_base_path}/{wos_id}-normalised.json", 'w') as output_file:
-        json.dump(output_data, output_file)
+    with open(f"{args.dest_base_path}/{wos_id}-normalised.json", 'w') as output_file:
+      json.dump(output_data, output_file)
