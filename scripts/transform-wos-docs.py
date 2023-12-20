@@ -14,7 +14,7 @@ def get_data(key, data):
 
 def get_publication_type(input_data):
 
-  #print("Wos ID: " + str(wos_id))
+  print("Wos ID: " + str(wos_id))
   source_type  = get_data('pubtype', get_data('pub_info', get_data('summary', get_data('static_data', input_data))))
   #print("Source Type: " + source_type)
   document_type = ""
@@ -103,7 +103,11 @@ def get_published_in(input_data):
 
 
 def get_abstract(input_data):
-  return(input_data['p'])
+  if input_data.get('p') is None:
+    print("No abstract for this document")
+    return None
+  else:
+    return(input_data['p'])
 
 def format_keywords(keywords):
   if keywords is None:
@@ -117,6 +121,9 @@ def create_publication_identifier_entry(code, value):
 def create_publication_identifiers(wos_id, input_data):
   identifiers = []
   identifiers.append(create_publication_identifier_entry('isi-id', wos_id))
+  # If there are just 1 indentifier, it is not in a list
+  if isinstance(input_data, dict):
+    input_data = [input_data]
   for id in input_data:
     if id['type'] == "doi":
       identifiers.append(create_publication_identifier_entry('doi', id['value']))
@@ -143,6 +150,9 @@ def create_authors(input_data):
   for individual in persons:
     person = {}
     affiliation = {}
+    if (individual.get('first_name') is None) or (individual.get('last_name') is None):
+      print("First or last name is missing for seq no " + str(individual['seq_no']) + " for this document, skipping this entry")
+      continue
     person['position'] = individual['seq_no']
     person['first_name'] = individual['first_name']
     person['last_name'] = individual['last_name']
@@ -162,7 +172,6 @@ if not os.path.isdir(args.source_path):
 
 for file_name in os.listdir(args.source_path):
   with open(os.path.join(args.source_path, file_name)) as input_file:
-    try:
       input_data = json.load(input_file)
       wos_id = get_wos_id(input_data)
       publication_type = get_publication_type(input_data)
@@ -210,7 +219,3 @@ for file_name in os.listdir(args.source_path):
 
       with open(f"{args.dest_base_path}/{wos_id}-normalised.json", 'w') as output_file:
         json.dump(output_data, output_file)
-
-    except TypeError:
-      print("TypeError: " + wos_id)      # XMAGNN
-      continue
