@@ -103,7 +103,7 @@ def get_published_in(input_data):
 
 
 def get_abstract(input_data):
-  if input_data.get('p') is None:
+  if input_data is None or input_data.get('p') is None:
     print("No abstract for this document")
     return None
   else:
@@ -113,6 +113,8 @@ def format_keywords(keywords):
   if keywords is None:
     return None
   else:
+    # A keyword may be represented as an integer in the data
+    keywords = [str(k) for k in keywords]
     return ", ".join(keywords)
 
 def create_publication_identifier_entry(code, value):
