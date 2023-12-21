@@ -12,6 +12,12 @@ def get_data(key, data):
   else:
     return None
 
+def exclude_document(type):
+  if type == "correction" or type == "correction, addition" or type == "retracted publication":
+    return True
+  else:
+    return False
+
 def get_publication_type(input_data):
 
   print("Wos ID: " + str(wos_id))
@@ -34,6 +40,9 @@ def get_publication_type(input_data):
 
   source_type	= source_type.lower()
   document_type = document_type.lower()
+
+  if exclude_document(document_type):
+    return None
 
   if source_type == "journal" and document_type == "article": 
     return {"id": 5, "ref_value": "ISREF", "label": "Artikel i vetenskaplig tidskrift"}
