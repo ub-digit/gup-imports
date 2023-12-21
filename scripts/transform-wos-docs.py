@@ -147,6 +147,10 @@ def create_person_identifier_entry(type, value):
 
 def create_person_identifiers(input_data):
   identifiers = []
+  # orcid
+  orcid_id_value = get_data("orcid_id", input_data)
+  if orcid_id_value is not None:
+    identifiers.append(create_person_identifier_entry("orcid", orcid_id_value))
   # researcher-id
   researcher_id_value = get_data("r_id", input_data)
   if researcher_id_value is not None:
