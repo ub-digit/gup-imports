@@ -116,7 +116,11 @@ def get_abstract(input_data):
     print("No abstract for this document")
     return None
   else:
-    return(input_data['p'])
+    count = get_data('count', input_data)
+    if count == 1:
+      return(input_data['p'])
+    else: 
+      return("\n\n".join(input_data['p']))
 
 def format_keywords(keywords):
   if keywords is None:
