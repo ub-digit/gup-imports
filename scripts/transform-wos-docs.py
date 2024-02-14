@@ -31,7 +31,10 @@ def get_publication_type(input_data):
   else:
     for doctype in get_data('doctype', doctypes):
       if doctype != "Early Access":
-        document_type = doctype
+        if document_type == "Article" and doctype == "Proceedings Paper":
+          document_type = "Article"
+        else:
+          document_type = doctype
   #print("Document Type: " + document_type)
   if source_type is None:
     return {"id": 21, "ref_value": "NA", "label": "Annan publikation"}
