@@ -217,7 +217,7 @@ for file_name in os.listdir(args.source_path):
       continue
     output_data = {"data": {}}
     output_data["data"]["id"] = "WOS_" + wos_id
-    output_data["data"]["publication_type_id"] = str(publication_type["id"])
+    output_data["data"]["publication_type_id"] = publication_type["id"]
     output_data["data"]["publication_type_label"] = publication_type["label"]
     output_data["data"]["ref_value"] = publication_type["ref_value"]
     output_data["data"]["title"] = get_title(get_data('title', get_data('titles', get_data('summary', get_data('static_data', input_data)))))
