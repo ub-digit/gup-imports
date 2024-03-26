@@ -23,5 +23,5 @@ for file_name in os.listdir(args.dir_path):
   print(json_content)
   id = json_content["UID"]
   doc = {'type': 'WOS','wos': json_content}
-  resp = es.index(index = args.index_name, id = id, document = doc)
+  resp = es.index(index = args.index_name, id = id, body = doc)
   print(resp['result'])

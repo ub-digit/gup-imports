@@ -5,9 +5,6 @@ import os
 import argparse
 from datetime import date, timedelta, datetime
 
-#'https://api.elsevier.com/content/search/scopus?apiKey=xxxxxxxxx&httpAccept=application/json&date=&count=2&query=AF-ID(%22Goteborgs%20Universitet%22%2060016437)%20AND%20PUBYEAR%20%3E%202015'
-#(AF-ID("Goteborgs Universitet" 60016437) OR AF-ID("Sahlgrenska Academy" 60027675) OR AF-ID("Goteborgs universitet Institutionen for biomedicin" 60079626) OR AF-ID("Tjarno Marine Biological Laboratory" 60055702) OR AF-ID("[No Affiliation ID found" 60008491) OR AF-ID("Goteborgs Universitet Institute of Clinical Sciences" 60004831) OR AF-ID("[No Affiliation ID found" 60010505) OR AF-ID("Hogskolan for Design och Konsthantverk" 60005288)) AND PUBYEAR > 2015
-#AND LOAD-DATE AFT 20200101 AND LOAD-DATE BEF 20200201
 base_url = 'https://api.elsevier.com/content/search/scopus'
 base_query = '(AF-ID("Goteborgs Universitet" 60016437) OR AF-ID("Sahlgrenska Academy" 60027675) OR AF-ID("Goteborgs universitet Institutionen for biomedicin" 60079626) OR AF-ID("Tjarno Marine Biological Laboratory" 60055702) OR AF-ID("[No Affiliation ID found" 60008491) OR AF-ID("Goteborgs Universitet Institute of Clinical Sciences" 60004831) OR AF-ID("[No Affiliation ID found" 60010505) OR AF-ID("Hogskolan for Design och Konsthantverk" 60005288))'
 

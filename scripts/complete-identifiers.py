@@ -29,5 +29,11 @@ for file_name in os.listdir(args.dir_path):
       if i['identifier_code'] == 'doi':
         output['doi'] = i['identifier_value'] 
         #print("doi: " + i['identifier_value'])
+      if i['identifier_code'] == 'isi-id':
+        output['isi-id'] = i['identifier_value']
+        #print("isi-id: " + i['identifier_value'])
+      if i['identifier_code'] == 'pubmed':
+        output['pubmed'] = i['identifier_value']
+        #print("pubmed: " + i['identifier_value'])
     res = json.dumps(output)
     print(res)
