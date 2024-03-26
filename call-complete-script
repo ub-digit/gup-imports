@@ -1,0 +1,10 @@
+#!/bin/bash
+
+d1=$1
+d2=$(date -I -d "$d1 + 6 year")
+i1=$2
+while [ "$d1" != $d2 ]; do
+  docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/complete-identifiers.py -d /data/files/'"$i1"'-normalised/'"$d1"'' >> /var/tmp/matchning-2024-03-01/"$i1"-identifiers.txt
+  d1=$(date -I -d "$d1 + 1 day")
+done
+

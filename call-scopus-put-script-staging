@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 d1=$1
-d2=$(date -I -d "$d1 + 4 day")
+d2=$(date -I -d "$d1 + 4 year")
 
 while [ "$d1" != $d2 ]; do
   docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d1"' -u $INDEX_MANAGER_STAGING_URL -a $INDEX_MANAGER_STAGING_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-staging.log

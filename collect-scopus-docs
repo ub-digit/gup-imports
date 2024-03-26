@@ -13,11 +13,11 @@ docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/transform-s
 # message broker and having one queue for each receiver.
 
 # LAB
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_LAB_URL -a $INDEX_MANAGER_LAB_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-lab.log
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_LAB_URL -a $INDEX_MANAGER_LAB_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-lab.log 2>&1
 
 # STAGING
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_STAGING_URL -a $INDEX_MANAGER_STAGING_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-staging.log
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_STAGING_URL -a $INDEX_MANAGER_STAGING_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-staging.log 2>&1
 
-# PRODUCTION - Omit Production environment since it is not yet in use.
-#docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_URL -a $INDEX_MANAGER_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-production.log
+# PRODUCTION
+docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_URL -a $INDEX_MANAGER_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-production.log 2>&1
 
