@@ -108,8 +108,14 @@ def get_published_in(input_data):
   for title in titles:
       if get_data('type', title) == "source":
          output_data["data"]["sourcetitle"] = get_data('content', title)
-  output_data["data"]["sourcevolume"] = get_data('vol', get_data('pub_info', get_data('summary', get_data('static_data', input_data))))
-  output_data["data"]["sourceissue"] = get_data('issue', get_data('pub_info', get_data('summary', get_data('static_data', input_data))))
+  sourcevolume = get_data('vol', get_data('pub_info', get_data('summary', get_data('static_data', input_data))))
+  sourceissue = get_data('issue', get_data('pub_info', get_data('summary', get_data('static_data', input_data))))
+  if sourcevolume is not None:
+    sourcevolume = str(sourcevolume)
+  if sourceissue is not None:
+    sourceissue = str(sourceissue)
+  output_data["data"]["sourcevolume"] = sourcevolume
+  output_data["data"]["sourceissue"] = sourceissue
   output_data["data"]["sourcepages"] = get_data('content', get_data('page', get_data('pub_info', get_data('summary', get_data('static_data', input_data)))))
   return
 
