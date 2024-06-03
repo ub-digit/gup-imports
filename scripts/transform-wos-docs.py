@@ -178,10 +178,10 @@ def create_person_identifiers(input_data):
   researcher_id_value = get_data("r_id", input_data)
   if researcher_id_value is not None:
     identifiers.append(create_person_identifier_entry("wos-researcher-id", researcher_id_value))
-  # daising-id
-  daising_id_value = get_data("daisng_id", input_data)
-  if daising_id_value is not None:
-    identifiers.append(create_person_identifier_entry("wos-daising-id", str(daising_id_value)))
+  # daisng-id (internal id for the author in the WOS database)
+  daisng_id_value = get_data("daisng_id", input_data)
+  if daisng_id_value is not None:
+    identifiers.append(create_person_identifier_entry("wos-daisng-id", str(daisng_id_value)))
   return identifiers
 
 def create_authors(input_data):
