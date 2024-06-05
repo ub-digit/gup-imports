@@ -1,4 +1,3 @@
-version: '3.7'
 services:
   elasticsearch:
     image: elasticsearch:${ELASTIC_VERSION}
@@ -30,3 +29,17 @@ services:
       - ${HOST_SCOPUS_NORMALISED_JSON_FILES_DIR}:/data/files/scopus-normalised
       - ${HOST_WOS_NORMALISED_JSON_FILES_DIR}:/data/files/wos-normalised
       - ${HOST_SCRIPT_FILES_DIR}:/data/scripts
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${KIBANA_VERSION}
+    volumes:
+      - ${KIBANA_HOST_DATA_DIR}:/usr/share/kibana/data
+    restart: always
+    environment:
+      SERVER_NAME: ${KIBANA_SERVER_NAME}
+      SERVER_PUBLICBASEURL: ${KIBANA_PUBLIC_URL}
+      ELASTICSEARCH_HOSTS: ${KIBANA_ELASTICSEARCH_HOSTS}
+      SERVER_BASEPATH: ${KIBANA_SERVER_BASEPATH}
+#      SERVER_HOST=0.0.0.0
+      SERVER_REWRITEBASEPATH: "true"
+    ports:
+      - ${KIBANA_HOST_PORT}:${KIBANA_PORT}
