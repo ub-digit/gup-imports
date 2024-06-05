@@ -1,10 +1,10 @@
 #!/bin/bash
 
 d1=$1
-d2=$(date -I -d "$d1 + 5 year")
+d2=$(date -I -d "$d1 + 6 year")
 
 while [ "$d1" != $d2 ]; do
-  docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/transform-wos-docs.py -s /data/files/wos-raw/'"$d1"' -d /data/files/wos-normalised/'"$d1"'' >> /var/tmp/gup-wos-normalising.log 2>&1
+  docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/transform-wos-docs.py -s /data/files/wos-raw/'"$d1"' -d /data/files/wos-normalised/'"$d1"'' >> /var/tmp/gup-wos-normalising.log 2>&1
   d1=$(date -I -d "$d1 + 1 day")
 done
 

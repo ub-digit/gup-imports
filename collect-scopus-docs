@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 d=$(date -I -d "3 day ago")
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/get-scoups-docs.py -d '"$d"' -o /data/files/scopus-raw -a $SCOPUS_API_KEY' >> /var/tmp/gup-scopus.log 2>&1
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/index-scopus-docs.py -d /data/files/scopus-raw/'"$d"'' >> /var/tmp/gup-scopus-indexing.log 2>&1
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/transform-scopus-docs.py -s /data/files/scopus-raw/'"$d"' -d /data/files/scopus-normalised/'"$d"'' >> /var/tmp/gup-scopus-normalising.log 2>&1
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/get-scoups-docs.py -d '"$d"' -o /data/files/scopus-raw -a $SCOPUS_API_KEY' >> /var/tmp/gup-scopus.log 2>&1 
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/index-scopus-docs.py -d /data/files/scopus-raw/'"$d"'' >> /var/tmp/gup-scopus-indexing.log 2>&1
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/transform-scopus-docs.py -s /data/files/scopus-raw/'"$d"' -d /data/files/scopus-normalised/'"$d"'' >> /var/tmp/gup-scopus-normalising.log 2>&1
 
 
 # Send the transformed scopus data to gup-admin, index-manager in each
@@ -13,11 +13,11 @@ docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/transform-s
 # message broker and having one queue for each receiver.
 
 # LAB
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_LAB_URL -a $INDEX_MANAGER_LAB_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-lab.log 2>&1
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_LAB_URL -a $INDEX_MANAGER_LAB_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-lab.log 2>&1
 
 # STAGING
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_STAGING_URL -a $INDEX_MANAGER_STAGING_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-staging.log 2>&1
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_STAGING_URL -a $INDEX_MANAGER_STAGING_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-staging.log 2>&1
 
 # PRODUCTION
-docker exec gup-imports_gup-imports_1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_URL -a $INDEX_MANAGER_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-production.log 2>&1
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/scopus-normalised/'"$d"' -u $INDEX_MANAGER_URL -a $INDEX_MANAGER_API_KEY' >> /var/tmp/gup-scopus-put-to-gup-admin-index-manager-production.log 2>&1
 
