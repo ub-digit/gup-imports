@@ -6,6 +6,7 @@ import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dir", dest = "dir_path", required = True)
+parser.add_argument("-a", "--only-articles", dest = "only_articles", default = False)
 #parser.add_argument("-u", "--url", dest = "url", required = True)
 #parser.add_argument("-a", "--api-key", dest = "api_key", required = True)
 
@@ -19,6 +20,9 @@ for file_name in os.listdir(args.dir_path):
   with open(os.path.join(args.dir_path, file_name)) as content:
     #print("Reading file " + file_name)
     json_data = json.load(content)
+    # If only_articles is set to True and the document is not an article, i.e. publication_type_id not equals 5, 22, or 40, skip it
+    if args.only_articles and json_data['data']['publication_type_id'] not in [5, 22, 40]:
+      continue
     output = {}    
     for i in json_data['data']['publication_identifiers']:
       #print(i)
