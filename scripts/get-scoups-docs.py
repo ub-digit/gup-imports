@@ -132,7 +132,8 @@ while (first or start < total):
   for doc in docs:
     scopus_id = doc["dc:identifier"].split("SCOPUS_ID:",1)[1]
     # Special handling for authors, check if total number of authors is more than 100
-    if int(doc["author-count"]["@total"]) > 100:
+    # If key "@total" exists in doc["author-count"], check that the value is greater than 100, otherwise check that the value of "$" key is equal to 100
+    if "@total" in doc["author-count"] and int(doc["author-count"]["@total"]) > 100 or doc["author-count"]["$"] == "100":
       print("More than 100 authors for document with Scopus Id " + scopus_id)
       full_info = get_full_info(scopus_id, args.apikey)
       all_authors = full_info["authors"]
