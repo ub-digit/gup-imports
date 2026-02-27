@@ -13,7 +13,15 @@ def get_data(key, data):
     return None
 
 def exclude_document(type):
-  if type == "correction" or type == "correction, addition" or type == "retracted publication":
+  if type == "meeting abstract":
+    return True
+  if type == "meeting summary":
+    return True
+  if type == "correction":
+    return True
+  if type == "correction, addition":
+    return True
+  if type == "retracted publication":
     return True
   else:
     return False
@@ -69,12 +77,6 @@ def get_publication_type(input_data):
     return {"id": 10, "ref_value": "NOTREF", "label": "Kapitel i bok"}
   elif source_type == "book series" and document_type == "book chapter": 
     return {"id": 10, "ref_value": "NOTREF", "label": "Kapitel i bok"}
-  elif source_type == "book" and document_type == "meeting abstract": 
-    return {"id": 1, "ref_value": "NOTREF", "label": "Konferensbidrag (offentliggjort, men ej förlagsutgivet)"}
-  elif source_type == "book series" and document_type == "meeting abstract": 
-    return {"id": 1, "ref_value": "NOTREF", "label": "Konferensbidrag (offentliggjort, men ej förlagsutgivet)"}
-  elif source_type == "journal" and document_type == "meeting abstract":
-    return {"id": 1, "ref_value": "NOTREF", "label": "Konferensbidrag (offentliggjort, men ej förlagsutgivet)"}
   elif source_type == "book" and document_type == "editorial material": 
     return {"id": 10, "ref_value": "NOTREF", "label": "Kapitel i bok"}
   elif source_type == "book series" and document_type == "editorial material": 
