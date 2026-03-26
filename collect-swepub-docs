@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+d=$(date -I -d "3 day ago")
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/get-swepub-docs.py -d '"$d"' -o /data/files/swepub-raw -a $INDEX_MANAGER_API_KEY' >> /var/tmp/gup-swepub.log 2>&1
+
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/transform-swepub-docs.py -s /data/files/swepub-raw/'"$d"' -d /data/files/swepub-normalised/'"$d"'' >> /var/tmp/gup-swepub-normalising.log 2>&1
+
+# Send the transformed scopus data to gup-admin, index-manager in each
+# environment since we only fetch scopus data once due to restrictions
+# on the Scopus API usage.
+# Typically this procedure would be replaced by sending a message to a
+# message broker and having one queue for each receiver.
+
+# LAB
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/swepub-normalised/'"$d"' -u $INDEX_MANAGER_LAB_URL -a $INDEX_MANAGER_LAB_API_KEY' >> /var/tmp/gup-swepub-put-to-gup-admin-index-manager-lab.log 2>&1
+
+# PRODUCTION
+docker exec gup-imports-gup-imports-1 bash -c 'python3 /data/scripts/put-to-gup-admin.py -d /data/files/swepub-normalised/'"$d"' -u $INDEX_MANAGER_URL -a $INDEX_MANAGER_API_KEY' >> /var/tmp/gup-swepub-put-to-gup-admin-index-manager-production.log 2>&1
