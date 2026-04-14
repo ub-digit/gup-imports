@@ -62,7 +62,7 @@ args = parser.parse_args()
 params = {'metadataPrefix': 'swepub_mods','from': args.date, 'until': args.date, 'set': 'CTH_SWEPUB'}
 
 print ("Date: " + args.date)
-sickle = Sickle(base_url)
+sickle = Sickle(base_url, max_retries = 10, retry_status_codes = [500, 501, 502, 503])
 try:
     records = sickle.ListRecords(**params)
 # If sickle.oaiexceptions.NoRecordsMatch exception is raised, print "No documents found" and exit
