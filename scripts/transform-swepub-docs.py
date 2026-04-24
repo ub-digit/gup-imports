@@ -146,7 +146,7 @@ def get_related_item_info(data):
       isbn = get_isbn(related_item)
       sourcevolume = get_data("mods:part/mods:detail[@type='volume']/mods:number", related_item)
       sourceissue = get_data("mods:part/mods:detail[@type='issue']/mods:number", related_item)
-      article_number = get_data("mods:part/mods:detail[@type='article-number']/mods:number", related_item)
+      article_number = get_data("mods:part/mods:detail[@type='artNo']/mods:number", related_item)
       sourcepages = get_sourcepages(related_item)
   return {"sourcetitle": sourcetitle, "issn": issn, "eissn": eissn, "isbn": isbn, "sourcevolume": sourcevolume, "sourceissue": sourceissue, "article_number": article_number, "sourcepages": sourcepages, "pub_notes": pub_notes}
 
