@@ -26,8 +26,8 @@ print ("Date: " + args.date)
 query = base_query
 print("Query: " + query)
 
-publishTimeSpan = args.date + "+" + args.date
-params = {'usrQuery': query, 'databaseId': 'WOS', 'publishTimeSpan': publishTimeSpan, 'count': args.count}
+modifiedTimeSpan = args.date + "+" + args.date
+params = {'usrQuery': query, 'databaseId': 'WOS', 'modifiedTimeSpan': modifiedTimeSpan, 'count': args.count}
 
 start = 1
 first = True
